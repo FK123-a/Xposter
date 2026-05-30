@@ -1,0 +1,18 @@
+{
+  "extName": "Xposter — 多平台内容发布",
+  "extDescription": "一次编写，多平台发布。自动适配公众号、知乎、B站、小红书格式。",
+  "tab_editor": "编辑",
+  "tab_publish": "发布",
+  "publish_simulated": "模拟发布",
+  "publish_real": "真实发布",
+  "publish_button": "发布到 {count} 个平台",
+  "publishing": "发布中...",
+  "done": "完成!",
+  "status_idle": "等待",
+  "status_adapting": "格式转换中...",
+  "status_publishing": "发布中...",
+  "status_done": "成功",
+  "status_error": "失败",
+  "unsaved": "未保存",
+  "saved": "已保存"
+}

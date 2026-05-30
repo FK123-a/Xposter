@@ -1,0 +1,18 @@
+{
+  "extName": "Xposter — Multi-Platform Publisher",
+  "extDescription": "Write once, publish everywhere. Auto-adapts for WeChat, Zhihu, Bilibili, and RED.",
+  "tab_editor": "Editor",
+  "tab_publish": "Publish",
+  "publish_simulated": "Simulated",
+  "publish_real": "Real",
+  "publish_button": "Publish to {count} platform(s)",
+  "publishing": "Publishing...",
+  "done": "Done!",
+  "status_idle": "Waiting",
+  "status_adapting": "Adapting...",
+  "status_publishing": "Publishing...",
+  "status_done": "OK",
+  "status_error": "Error",
+  "unsaved": "Unsaved",
+  "saved": "Saved"
+}
