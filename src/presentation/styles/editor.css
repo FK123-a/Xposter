@@ -1,0 +1,79 @@
+/* CodeMirror 6 editor styles */
+.xposter-editor .cm-editor {
+  height: 100%;
+}
+
+.xposter-editor .cm-editor .cm-content {
+  padding: 12px 16px;
+  font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', 'Consolas', monospace;
+}
+
+.xposter-editor .cm-editor .cm-line {
+  line-height: 1.6;
+}
+
+/* Inline code */
+.xposter-editor .cm-editor .ͼ7 {
+  background: #f0f0f0;
+  border-radius: 3px;
+  padding: 1px 4px;
+}
+
+/* Placeholder text */
+.xposter-editor .cm-editor .cm-placeholder {
+  color: #999;
+}
+
+/* Preview content */
+.xposter-preview-content.markdown-body h1 {
+  font-size: 1.5em;
+  margin: 0.5em 0;
+  padding-bottom: 0.3em;
+  border-bottom: 1px solid #eee;
+}
+
+.xposter-preview-content.markdown-body h2 {
+  font-size: 1.25em;
+  margin: 0.5em 0;
+}
+
+.xposter-preview-content.markdown-body p {
+  margin: 0.5em 0;
+}
+
+.xposter-preview-content.markdown-body blockquote {
+  border-left: 3px solid #ddd;
+  margin: 0.5em 0;
+  padding: 0.3em 1em;
+  color: #666;
+}
+
+.xposter-preview-content.markdown-body ul,
+.xposter-preview-content.markdown-body ol {
+  padding-left: 1.5em;
+}
+
+.xposter-preview-content.markdown-body code {
+  background: #f0f0f0;
+  border-radius: 3px;
+  padding: 1px 4px;
+  font-family: monospace;
+  font-size: 0.9em;
+}
+
+.xposter-preview-content.markdown-body pre {
+  background: #f5f5f5;
+  border-radius: 6px;
+  padding: 12px 16px;
+  overflow-x: auto;
+}
+
+.xposter-preview-content.markdown-body pre code {
+  background: none;
+  padding: 0;
+}
+
+.xposter-preview-content.markdown-body img {
+  max-width: 100%;
+  border-radius: 4px;
+}
