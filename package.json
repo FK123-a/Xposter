@@ -1,0 +1,48 @@
+{
+  "name": "xposter",
+  "version": "0.1.0",
+  "description": "Multi-platform content publishing browser extension",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "wxt",
+    "dev:firefox": "wxt -b firefox",
+    "build": "wxt build",
+    "build:zip": "wxt zip",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "type-check": "tsc --noEmit",
+    "lint": "tsc --noEmit",
+    "postinstall": "wxt prepare"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FK123-a/Xposter.git"
+  },
+  "keywords": [
+    "browser-extension",
+    "cross-posting",
+    "content-publishing",
+    "multi-platform"
+  ],
+  "author": "FK123-a",
+  "license": "MIT",
+  "homepage": "https://github.com/FK123-a/Xposter#readme",
+  "devDependencies": {
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
+    "@types/react": "^19.2.15",
+    "@types/react-dom": "^19.2.3",
+    "jsdom": "^29.1.1",
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.7",
+    "vitest-chrome": "^0.1.0",
+    "wxt": "^0.20.26"
+  },
+  "dependencies": {
+    "react": "^19.2.6",
+    "react-dom": "^19.2.6",
+    "zustand": "^5.0.14"
+  }
+}
