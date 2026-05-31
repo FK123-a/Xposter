@@ -75,10 +75,10 @@ export const PublishStatuses = [
 export type PublishStatus = (typeof PublishStatuses)[number];
 
 export const CONTENT_SCRIPT_ENTRIES: Record<PlatformCode, string> = {
-  'wechat-mp': 'platforms/wechat.content.js',
-  zhihu: 'platforms/zhihu.content.js',
-  bilibili: 'platforms/bilibili.content.js',
-  xiaohongshu: 'platforms/xiaohongshu.content.js',
+  'wechat-mp': 'content-scripts/wechat-mp.content.js',
+  zhihu: 'content-scripts/zhihu.content.js',
+  bilibili: 'content-scripts/bilibili.content.js',
+  xiaohongshu: 'content-scripts/xiaohongshu.content.js',
 } as const;
 
 export const STORAGE_KEYS = {
