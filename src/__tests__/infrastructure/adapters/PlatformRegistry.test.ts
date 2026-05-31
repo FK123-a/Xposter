@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { platformRegistry } from '../../../infrastructure/adapters/PlatformRegistry';
-import { MarkdownToWechat } from '../../../infrastructure/content/MarkdownToWechat';
+import { MarkdownToZhihu } from '../../../infrastructure/content/MarkdownToZhihu';
 
 // A minimal mock publisher for registry testing
 import type { IPlatformPublisher } from '../../../domain/ports/IPlatformPublisher';
@@ -39,34 +39,34 @@ describe('PlatformRegistry', () => {
   });
 
   it('registers and retrieves a publisher', () => {
-    const adapter = new MarkdownToWechat();
-    platformRegistry.register('wechat-mp', () => createMockPublisher('wechat-mp', adapter));
-    expect(platformRegistry.isRegistered('wechat-mp')).toBe(true);
-    expect(platformRegistry.getRegisteredCodes()).toContain('wechat-mp');
+    const adapter = new MarkdownToZhihu();
+    platformRegistry.register('zhihu', () => createMockPublisher('zhihu', adapter));
+    expect(platformRegistry.isRegistered('zhihu')).toBe(true);
+    expect(platformRegistry.getRegisteredCodes()).toContain('zhihu');
   });
 
   it('returns content adapter for a registered platform', () => {
-    const adapter = new MarkdownToWechat();
-    platformRegistry.register('wechat-mp', () => createMockPublisher('wechat-mp', adapter));
-    const fetched = platformRegistry.getContentAdapter('wechat-mp');
+    const adapter = new MarkdownToZhihu();
+    platformRegistry.register('zhihu', () => createMockPublisher('zhihu', adapter));
+    const fetched = platformRegistry.getContentAdapter('zhihu');
     expect(fetched).toBe(adapter);
   });
 
   it('throws for unregistered platform', () => {
-    expect(() => platformRegistry.getPublisher('zhihu')).toThrow('No publisher registered');
+    expect(() => platformRegistry.getPublisher('bilibili')).toThrow('No publisher registered');
   });
 
   it('unregisters a platform', () => {
-    const adapter = new MarkdownToWechat();
-    platformRegistry.register('wechat-mp', () => createMockPublisher('wechat-mp', adapter));
-    platformRegistry.unregister('wechat-mp');
-    expect(platformRegistry.isRegistered('wechat-mp')).toBe(false);
+    const adapter = new MarkdownToZhihu();
+    platformRegistry.register('zhihu', () => createMockPublisher('zhihu', adapter));
+    platformRegistry.unregister('zhihu');
+    expect(platformRegistry.isRegistered('zhihu')).toBe(false);
   });
 
   it('supports multiple platforms', () => {
-    const adapter = new MarkdownToWechat();
-    platformRegistry.register('wechat-mp', () => createMockPublisher('wechat-mp', adapter));
+    const adapter = new MarkdownToZhihu();
     platformRegistry.register('zhihu', () => createMockPublisher('zhihu', adapter));
+    platformRegistry.register('bilibili', () => createMockPublisher('bilibili', adapter));
     expect(platformRegistry.getRegisteredCodes()).toHaveLength(2);
   });
 });

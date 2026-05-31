@@ -39,14 +39,14 @@ Start writing your content here using **Markdown**.
 > Select platforms below and click **Publish** when ready.
 `;
 
-const INITIAL_PLATFORMS: PlatformCode[] = ['wechat-mp', 'zhihu', 'bilibili', 'xiaohongshu'];
+const INITIAL_PLATFORMS: PlatformCode[] = ['zhihu', 'bilibili', 'xiaohongshu'];
 
 export const useContentStore = create<ContentState>((set) => ({
   markdown: INITIAL_MARKDOWN,
   title: 'Welcome to Xposter',
   lastSaved: null,
   selectedPlatforms: INITIAL_PLATFORMS,
-  activePreviewPlatform: 'wechat-mp',
+  activePreviewPlatform: 'zhihu',
   isDirty: false,
 
   setMarkdown: (text: string) => {

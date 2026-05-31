@@ -21,7 +21,7 @@ export const PublishDashboard: React.FC = () => {
   const [isPublishing, setIsPublishing] = useState(false);
   const [results, setResults] = useState<PublishStatus[]>([]);
 
-  const allCodes: PlatformCode[] = ['wechat-mp', 'zhihu', 'bilibili', 'xiaohongshu'];
+  const allCodes: PlatformCode[] = ['zhihu', 'bilibili', 'xiaohongshu'];
 
   const handlePublish = async () => {
     if (selectedPlatforms.length === 0) return;

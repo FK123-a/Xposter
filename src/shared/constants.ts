@@ -2,7 +2,6 @@
  * Platform identifiers
  */
 export const PlatformCodes = [
-  'wechat-mp',
   'zhihu',
   'bilibili',
   'xiaohongshu',
@@ -11,7 +10,6 @@ export const PlatformCodes = [
 export type PlatformCode = (typeof PlatformCodes)[number];
 
 export const PLATFORM_DISPLAY_NAMES: Record<PlatformCode, string> = {
-  'wechat-mp': 'WeChat Official Account',
   zhihu: 'Zhihu',
   bilibili: 'Bilibili',
   xiaohongshu: 'RED (Xiaohongshu)',
@@ -29,11 +27,6 @@ export const PLATFORM_LIMITS: Record<
     requiresCover: boolean;
   }
 > = {
-  'wechat-mp': {
-    maxTitleLength: 64, maxContentLength: 0, maxImageSizeMB: 10,
-    supportedImageFormats: ['jpg', 'jpeg', 'png', 'gif'],
-    requiresTags: false, maxTags: 0, requiresCover: true,
-  },
   zhihu: {
     maxTitleLength: 100, maxContentLength: 0, maxImageSizeMB: 20,
     supportedImageFormats: ['jpg', 'jpeg', 'png', 'gif', 'webp'],
@@ -52,14 +45,12 @@ export const PLATFORM_LIMITS: Record<
 };
 
 export const PLATFORM_PUBLISH_URLS: Record<PlatformCode, string> = {
-  'wechat-mp': 'https://mp.weixin.qq.com/cgi-bin/appmsg?t=media/appmsg_edit&action=edit&type=10&isMul=1',
   zhihu: 'https://zhuanlan.zhihu.com/write',
-  bilibili: 'https://member.bilibili.com/platform/upload/video/frame',
-  xiaohongshu: 'https://creator.xiaohongshu.com/publish/publish',
+  bilibili: 'https://member.bilibili.com/platform/upload/text/new-edit',
+  xiaohongshu: 'https://creator.xiaohongshu.com/publish/publish?from=menu&target=article',
 };
 
 export const PLATFORM_COLORS: Record<PlatformCode, string> = {
-  'wechat-mp': '#07C160',
   zhihu: '#0066FF',
   bilibili: '#FB7299',
   xiaohongshu: '#FF3B30',
@@ -75,7 +66,6 @@ export const PublishStatuses = [
 export type PublishStatus = (typeof PublishStatuses)[number];
 
 export const CONTENT_SCRIPT_ENTRIES: Record<PlatformCode, string> = {
-  'wechat-mp': 'content-scripts/wechat-mp.content.js',
   zhihu: 'content-scripts/zhihu.content.js',
   bilibili: 'content-scripts/bilibili.content.js',
   xiaohongshu: 'content-scripts/xiaohongshu.content.js',
