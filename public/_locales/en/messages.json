@@ -4,7 +4,7 @@
     "description": "Extension name"
   },
   "extDescription": {
-    "message": "Write once, publish everywhere. Auto-adapts for WeChat, Zhihu, Bilibili, and RED.",
+    "message": "Write once, publish everywhere. Auto-adapts for Zhihu, Bilibili, and RED.",
     "description": "Extension description"
   }
 }

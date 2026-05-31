@@ -1,6 +1,6 @@
 {
   "extName": "Xposter — 多平台内容发布",
-  "extDescription": "一次编写，多平台发布。自动适配公众号、知乎、B站、小红书格式。",
+  "extDescription": "一次编写，多平台发布。自动适配知乎、B站、小红书格式。",
   "tab_editor": "编辑",
   "tab_publish": "发布",
   "publish_simulated": "模拟发布",

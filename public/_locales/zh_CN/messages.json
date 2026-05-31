@@ -4,7 +4,7 @@
     "description": "Extension name"
   },
   "extDescription": {
-    "message": "一次编写，多平台发布。自动适配公众号、知乎、B站、小红书格式。",
+    "message": "一次编写，多平台发布。自动适配知乎、B站、小红书格式。",
     "description": "Extension description"
   }
 }
