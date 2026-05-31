@@ -124,13 +124,9 @@ export default defineBackground(() => {
           // Step 1: Adapt content
           const adapter = platformRegistry.getPublisher(platformCode);
           const contentAdapter = adapter.getContentAdapter();
-          let adapted = await contentAdapter.adapt(content);
+          const adapted = await contentAdapter.adapt(content);
 
-          // Step 2: Embed images as Base64 data URIs
-          // External image URLs may be blocked by the editor — convert to inline data URIs
-          adapted = { ...adapted, body: await embedImagesAsBase64(adapted.body) };
-
-          // Step 3: Validate
+          // Step 2: Validate
           const validation = contentAdapter.validate(adapted);
           if (!validation.valid) {
             results.push({
@@ -142,7 +138,7 @@ export default defineBackground(() => {
             continue;
           }
 
-          // Step 5: Open editor tab
+          // Step 3: Open editor tab
           const editorUrl = PLATFORM_PUBLISH_URLS[platformCode];
           console.log(`[Xposter] Opening editor: ${editorUrl}`);
           const tab = await browser.tabs.create({ url: editorUrl, active: true });
@@ -247,51 +243,6 @@ export default defineBackground(() => {
       };
       browser.tabs.onUpdated.addListener(listener);
     });
-  }
-
-  /**
-   * Convert all external image URLs in an HTML string to base64 data URIs.
-   * This ensures images display in the editor even when the platform blocks
-   * external image sources.
-   */
-  async function embedImagesAsBase64(html: string): Promise<string> {
-    const imgRegex = /<img[^>]+src="(https?:\/\/[^"]+)"/gi;
-    const urls: string[] = [];
-    let match: RegExpExecArray | null;
-
-    while ((match = imgRegex.exec(html)) !== null) {
-      if (match[1]) urls.push(match[1]);
-    }
-
-    if (urls.length === 0) return html;
-
-    console.log(`[Xposter] Embedding ${urls.length} image(s)...`);
-
-    // Fetch all images in parallel
-    const results = await Promise.all(
-      urls.map(async (url) => {
-        try {
-          const { base64, type } = await handleFetchImage(url);
-          if (base64) {
-            const mime = type || 'image/png';
-            return { url, dataUri: `data:${mime};base64,${base64}` };
-          }
-        } catch { /* skip */ }
-        return { url, dataUri: null };
-      }),
-    );
-
-    let result = html;
-    for (const { url, dataUri } of results) {
-      if (dataUri) {
-        // Escape special regex characters in the URL
-        const escaped = url.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-        result = result.replace(new RegExp(escaped, 'g'), dataUri);
-        console.log(`[Xposter] Embedded: ${url.substring(0, 60)}...`);
-      }
-    }
-
-    return result;
   }
 
   function delay(ms: number): Promise<void> {
