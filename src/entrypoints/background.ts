@@ -148,7 +148,7 @@ export default defineBackground(() => {
             continue;
           }
 
-          // Step 4: Wait for tab to fully load
+          // Step 6: Wait for tab to fully load
           console.log(`[Xposter] Waiting for tab ${tab.id} to load...`);
           await waitForTabLoad(tab.id);
           console.log(`[Xposter] Tab ${tab.id} loaded`);

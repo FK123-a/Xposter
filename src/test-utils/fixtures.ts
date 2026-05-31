@@ -40,7 +40,6 @@ export function createTestContent(overrides?: Partial<MarkdownContent>): Markdow
 }
 
 export const allPlatformCodes: PlatformCode[] = [
-  'wechat-mp',
   'zhihu',
   'bilibili',
   'xiaohongshu',

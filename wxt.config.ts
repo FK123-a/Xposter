@@ -17,8 +17,6 @@ export default defineConfig({
       'alarms',
     ],
     host_permissions: [
-      'https://mp.weixin.qq.com/*',
-      'https://api.weixin.qq.com/*',
       'https://zhuanlan.zhihu.com/*',
       'https://www.zhihu.com/*',
       'https://member.bilibili.com/*',
@@ -29,7 +27,6 @@ export default defineConfig({
     web_accessible_resources: [{
       resources: ['content-scripts/*.js'],
       matches: [
-        'https://mp.weixin.qq.com/*',
         'https://zhuanlan.zhihu.com/*',
         'https://member.bilibili.com/*',
         'https://creator.xiaohongshu.com/*',

@@ -4,7 +4,6 @@ import { EditorState } from '@codemirror/state';
 import { defaultKeymap, history, historyKeymap } from '@codemirror/commands';
 import { markdown } from '@codemirror/lang-markdown';
 import { syntaxHighlighting, defaultHighlightStyle } from '@codemirror/language';
-import { useContentStore } from '../../stores/contentStore';
 
 interface MarkdownEditorProps {
   /** External value (controlled mode) */
@@ -27,7 +26,7 @@ export const MarkdownEditor: React.FC<MarkdownEditorProps> = ({
   const viewRef = useRef<EditorView | null>(null);
   const saveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // Initialize editor
+  // Initialize CodeMirror editor
   useEffect(() => {
     if (!containerRef.current) return;
 
@@ -36,7 +35,6 @@ export const MarkdownEditor: React.FC<MarkdownEditorProps> = ({
         const newValue = update.state.doc.toString();
         onChange(newValue);
 
-        // Debounced auto-save
         if (onAutoSave) {
           if (saveTimerRef.current) clearTimeout(saveTimerRef.current);
           saveTimerRef.current = setTimeout(() => {
