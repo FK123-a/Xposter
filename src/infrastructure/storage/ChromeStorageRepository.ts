@@ -2,7 +2,8 @@ import type { IStorageRepository } from '../../domain/ports/IStorageRepository';
 import type { MarkdownContent } from '../../domain/models/content';
 import type { UserSettings, ApiCredentials } from '../../domain/models/settings';
 import type { PublishJob, PublishResult } from '../../domain/models/publish';
-import { STORAGE_KEYS, DEFAULT_USER_SETTINGS, type PlatformCode } from '../../shared/constants';
+import { STORAGE_KEYS, type PlatformCode } from '../../shared/constants';
+import { DEFAULT_USER_SETTINGS } from '../../domain/models/settings';
 
 export class ChromeStorageRepository implements IStorageRepository {
   // -----------------------------------------------------------------------

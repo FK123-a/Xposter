@@ -3,6 +3,7 @@ import { useContentStore } from '../../stores/contentStore';
 import type { PlatformCode, PublishMode } from '../../../shared/constants';
 import { PLATFORM_DISPLAY_NAMES, PLATFORM_COLORS } from '../../../shared/constants';
 import { platformRegistry } from '../../../infrastructure/adapters/platforms';
+import { createMarkdownContent } from '../../../domain/models/content';
 
 interface PublishStatus {
   code: PlatformCode;
@@ -32,38 +33,98 @@ export const PublishDashboard: React.FC = () => {
     }));
     setResults(initialResults);
 
-    // Simulate per-platform progress
-    for (const platform of selectedPlatforms) {
-      setResults((prev) =>
-        prev.map((r) => (r.code === platform ? { ...r, status: 'publishing' as const } : r)),
-      );
-
-      // Simulate work
-      await new Promise((resolve) => setTimeout(resolve, 600 + Math.random() * 400));
-
-      const publisher = platformRegistry.isRegistered(platform)
-        ? platformRegistry.getPublisher(platform)
-        : null;
-
-      if (publisher && mode === 'simulated') {
+    if (mode === 'simulated') {
+      // -------------------------------------------------------------------
+      // Simulated mode: adapt + validate content through real adapters,
+      // but do NOT open tabs or call APIs.
+      // -------------------------------------------------------------------
+      for (const platform of selectedPlatforms) {
         setResults((prev) =>
-          prev.map((r) => (r.code === platform ? { ...r, status: 'done' as const } : r)),
+          prev.map((r) => (r.code === platform ? { ...r, status: 'publishing' as const } : r)),
         );
-      } else if (!publisher) {
+
+        // Small delay so the user can see each platform progress
+        await new Promise((resolve) => setTimeout(resolve, 400));
+
+        try {
+          const publisher = platformRegistry.getPublisher(platform);
+          const content = createMarkdownContent(markdown, { tags: [] });
+          const adapted = await publisher.getContentAdapter().adapt(content);
+          const validation = publisher.getContentAdapter().validate(adapted);
+
+          setResults((prev) =>
+            prev.map((r) =>
+              r.code === platform
+                ? {
+                    ...r,
+                    status: validation.valid ? ('done' as const) : ('error' as const),
+                    error: validation.valid
+                      ? undefined
+                      : validation.issues.map((i) => i.message).join('; '),
+                  }
+                : r,
+            ),
+          );
+        } catch (err) {
+          setResults((prev) =>
+            prev.map((r) =>
+              r.code === platform
+                ? {
+                    ...r,
+                    status: 'error' as const,
+                    error: err instanceof Error ? err.message : 'Adapter error',
+                  }
+                : r,
+            ),
+          );
+        }
+      }
+    } else {
+      // -------------------------------------------------------------------
+      // Real mode: send to background service worker for orchestration.
+      // Background will ~> open editor tabs ~> inject content scripts ~> fill forms.
+      // -------------------------------------------------------------------
+      try {
+        const jobId = `job-${Date.now()}`;
+
+        // Update all to "publishing" — background will handle them one by one
         setResults((prev) =>
-          prev.map((r) =>
-            r.code === platform
-              ? { ...r, status: 'error' as const, error: 'Platform not registered' }
-              : r,
-          ),
+          prev.map((r) => ({ ...r, status: 'publishing' as const })),
         );
-      } else {
+
+        const response = await chrome.runtime.sendMessage({
+          type: 'PUBLISH_REQUEST',
+          payload: {
+            markdown,
+            platforms: selectedPlatforms,
+            jobId,
+          },
+        });
+
+        if (response?.results) {
+          setResults(
+            response.results.map(
+              (r: { platformCode: PlatformCode; status: string; error?: string }) => ({
+                code: r.platformCode,
+                status: r.status === 'published' ? ('done' as const) : ('error' as const),
+                error: r.error,
+              }),
+            ),
+          );
+        } else if (response?.error) {
+          // Background returned a top-level error
+          setResults((prev) =>
+            prev.map((r) => ({ ...r, status: 'error' as const, error: response.error })),
+          );
+        }
+      } catch (err) {
+        // Failed to reach background (service worker may be asleep)
         setResults((prev) =>
-          prev.map((r) =>
-            r.code === platform
-              ? { ...r, status: 'done' as const }
-              : r,
-          ),
+          prev.map((r) => ({
+            ...r,
+            status: 'error' as const,
+            error: err instanceof Error ? err.message : 'Connection to background failed',
+          })),
         );
       }
     }
@@ -71,18 +132,33 @@ export const PublishDashboard: React.FC = () => {
     setIsPublishing(false);
   };
 
-  const allDone = results.length > 0 && results.every((r) => r.status === 'done' || r.status === 'error');
+  const allDone =
+    results.length > 0 && results.every((r) => r.status === 'done' || r.status === 'error');
 
   return (
     <div style={{ padding: 16 }}>
       {/* Mode selector */}
       <div style={{ marginBottom: 12, display: 'flex', gap: 8 }}>
-        <label style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 13 }}>
-          <input type="radio" checked={mode === 'simulated'} onChange={() => setMode('simulated')} />
+        <label
+          style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 13, cursor: 'pointer' }}
+        >
+          <input
+            type="radio"
+            checked={mode === 'simulated'}
+            onChange={() => setMode('simulated')}
+            disabled={isPublishing}
+          />
           Simulated
         </label>
-        <label style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 13 }}>
-          <input type="radio" checked={mode === 'real'} onChange={() => setMode('real')} />
+        <label
+          style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 13, cursor: 'pointer' }}
+        >
+          <input
+            type="radio"
+            checked={mode === 'real'}
+            onChange={() => setMode('real')}
+            disabled={isPublishing}
+          />
           Real
         </label>
       </div>
@@ -165,7 +241,13 @@ export const PublishDashboard: React.FC = () => {
               height: 6,
               borderRadius: '50%',
               background:
-                r.status === 'done' ? '#4CAF50' : r.status === 'error' ? '#f44336' : r.status === 'publishing' ? '#FFC107' : '#ccc',
+                r.status === 'done'
+                  ? '#4CAF50'
+                  : r.status === 'error'
+                    ? '#f44336'
+                    : r.status === 'publishing'
+                      ? '#FFC107'
+                      : '#ccc',
             }}
           />
           <span style={{ flex: 1 }}>{PLATFORM_DISPLAY_NAMES[r.code]}</span>
@@ -182,6 +264,24 @@ export const PublishDashboard: React.FC = () => {
           </span>
         </div>
       ))}
+
+      {/* Tips for real mode */}
+      {mode === 'real' && (
+        <div
+          style={{
+            marginTop: 12,
+            padding: 8,
+            background: '#FFF9C4',
+            borderRadius: 4,
+            fontSize: 11,
+            color: '#666',
+            lineHeight: 1.5,
+          }}
+        >
+          真实模式将打开编辑器页面并自动填充内容。
+          发布前请确保已在目标平台登录。
+        </div>
+      )}
     </div>
   );
 };

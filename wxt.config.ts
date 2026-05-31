@@ -27,7 +27,7 @@ export default defineConfig({
       'https://edith.xiaohongshu.com/*',
     ],
     web_accessible_resources: [{
-      resources: ['platforms/*.js'],
+      resources: ['content-scripts/*.js'],
       matches: [
         'https://mp.weixin.qq.com/*',
         'https://zhuanlan.zhihu.com/*',

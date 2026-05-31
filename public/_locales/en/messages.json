@@ -1,0 +1,10 @@
+{
+  "extName": {
+    "message": "Xposter — Multi-Platform Publisher",
+    "description": "Extension name"
+  },
+  "extDescription": {
+    "message": "Write once, publish everywhere. Auto-adapts for WeChat, Zhihu, Bilibili, and RED.",
+    "description": "Extension description"
+  }
+}
