@@ -6,7 +6,7 @@
 
 ## Demo 视频
 
-> 占位，待补充链接
+> demo-video.zip
 
 ## 支持平台
 
